@@ -1,0 +1,43 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+
+const ConfirmPage = () => {
+  const navigate = useNavigate();
+
+ 
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-center">
+      {/* Appointment Card */}
+      <div className="bg-white rounded-lg shadow-md p-6 w-96 mb-6 text-left">
+        <div className="mb-2">
+          <h2 className="text-red-600 font-bold text-lg">SUN 19</h2>
+          <p className="text-gray-500 text-sm">JANUARY 2024</p>
+        </div>
+        <h3 className="text-2xl font-semibold">10.00 A.M</h3>
+        <p className="text-red-500 text-right text-sm mt-2">pending</p>
+      </div>
+
+      {/* Success Icon */}
+      <CheckCircle className="w-12 h-12 text-green-500" />
+      <h2 className="mt-4 text-lg font-bold text-blue-900">
+        APPOINTMENT IS PLACED SUCCESSFULLY
+      </h2>
+
+      {/* OK Button */}
+      <button
+        onClick={ () => {
+            navigate("/profile")}}
+        className="mt-6 px-6 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition"
+      >
+        OK
+      </button>
+    </div>
+  );
+};
+
+export default ConfirmPage;
+
+
+ 
