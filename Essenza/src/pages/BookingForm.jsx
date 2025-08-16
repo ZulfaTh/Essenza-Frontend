@@ -1,9 +1,14 @@
-import { useState, useEffect } from "react";
-// import axios from "axios";
+import { useState, useEffect, useContext } from "react";
+import axios from "../assets/axios";
 import { useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa"; // FontAwesome profile icon
+import { AppContent } from "../context/AppContext";
 
 export default function BookingForm() {
+
+  const {userData} = useContext(AppContent)
+
+
   const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [staffs, setStaffs] = useState([]);
@@ -16,21 +21,23 @@ export default function BookingForm() {
   const hour = new Date().getHours();
   const isWorkingHour = hour >= 9 && hour < 21;
 
-  //   // Fetch services
-  //   useEffect(() => {
-  //     axios
-  //       .get("http://localhost:8080/api/services")
-  //       .then((response) => setServices(response.data))
-  //       .catch((error) => console.error("Error fetching services:", error));
-  //   }, []);
-
-  //   // Fetch staffs
-  //   useEffect(() => {
-  //     axios
-  //       .get("http://localhost:8080/api/staffs")
-  //       .then((response) => setStaffs(response.data))
-  //       .catch((error) => console.error("Error fetching staffs:", error));
-  //   }, []);
+    // Fetch services
+    useEffect(() => {
+  axios
+    .get("/services")
+    .then((response) => {
+      setServices(response.data);
+      console.log("Services fetched:", response.data); // Check the data here
+    })
+    .catch((error) => console.error("Error fetching services:", error));
+}, []);
+    // Fetch staffs
+    useEffect(() => {
+      axios
+        .get("staffs")
+        .then((response) => setStaffs(response.data))
+        .catch((error) => console.error("Error fetching staffs:", error));
+    }, []);
 
   const handleCancelClick = () => navigate("/");
 
@@ -48,7 +55,7 @@ export default function BookingForm() {
           }}
         >
           <FaUserCircle className="text-2xl mr-2" />
-          <span className="font-semibold">User Name</span>
+          <span className="font-semibold">{userData ? userData.name : "user"}</span>
         </div>
 
         {/* Form Overlay */}
@@ -96,7 +103,7 @@ export default function BookingForm() {
               <option value="">Select Preferred Staff</option>
               {staffs.length > 0 ? (
                 staffs.map((staff) => (
-                  <option key={staff.id} value={staff.id}>
+                  <option key={staff._id} value={staff._id}>
                     {staff.staffName}
                   </option>
                 ))
@@ -109,12 +116,12 @@ export default function BookingForm() {
             <select
               value={selectedService}
               onChange={(e) => setSelectedService(e.target.value)}
-              className="p-3 rounded bg-white/80 text-gray-800"
+              className="p-3 rounded bg-white"
             >
               <option value="">Select Service</option>
               {services.length > 0 ? (
                 services.map((service) => (
-                  <option key={service.id} value={service.id}>
+                  <option key={service._id} value={service._id}  className="text-gray-800 bg-white" >
                     {service.serviceName}
                   </option>
                 ))
@@ -122,6 +129,14 @@ export default function BookingForm() {
                 <option>No Services Available</option>
               )}
             </select>
+
+            <div className="fixed top-0 left-0 bg-white p-4 z-[100]">
+  <select className="p-2 bg-white text-black">
+    <option>Test Option 1</option>
+    <option>Test Option 2</option>
+  </select>
+</div>
+
 
             {/* Buttons */}
             <div className="col-span-1 md:col-span-2 flex justify-center gap-4 mt-4">

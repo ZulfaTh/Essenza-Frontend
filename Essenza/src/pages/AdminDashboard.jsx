@@ -11,27 +11,27 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <main className="flex-1 p-6">
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-3 gap-6">
           <div
             className="bg-white rounded-2xl shadow-md p-6 cursor-pointer hover:shadow-lg transition"
             onClick={() => navigate("/servicesmgt")}
           >
-            <h2 className="text-lg font-semibold text-gray-800">Services</h2>
-            <p className="text-3xl font-bold text-pink-500 mt-2">15</p>
+            <h2 className="text-lg  text-purple-700">Services</h2>
+            <p className="text-3xl font-bold text-indigo-700 mt-2">15</p>
           </div>
           <div
             className="bg-white rounded-2xl shadow-md p-6 cursor-pointer hover:shadow-lg transition"
-            onClick={() => navigate("/customersmgt")}
+            onClick={() => navigate("/usermgt")}
           >
-            <h2 className="text-lg font-semibold text-gray-800">Customers</h2>
-            <p className="text-3xl font-bold text-pink-500 mt-2">8</p>
+            <h2 className="text-lg  text-purple-700">Customers</h2>
+            <p className="text-3xl font-bold text-indigo-700 mt-2">8</p>
           </div>
           <div
             className="bg-white rounded-2xl shadow-md p-6 cursor-pointer hover:shadow-lg transition"
             onClick={() => navigate("/staffsmgt")}
           >
-            <h2 className="text-lg font-semibold text-gray-800">Staffs</h2>
-            <p className="text-3xl font-bold text-pink-500 mt-2">20</p>
+            <h2 className="text-lg  text-purple-700">Staffs</h2>
+            <p className="text-3xl font-bold text-indigo-700 mt-2">20</p>
           </div>
         </div>
 
