@@ -22,8 +22,13 @@ const appointments = [
   },
 ];
 
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AppContent } from "../context/AppContext";
 export default function UserProfile() {
+
+  const {userData} = useContext(AppContent);
+
   const navigate = useNavigate();
   return (
     <div className=" px-40 py-20 w-screen ">
@@ -40,11 +45,8 @@ export default function UserProfile() {
 
           {/* User Info */}
           <div className="flex-1 justify-center my-auto">
-            <h2 className="text-2xl font-bold text-gray-800">Jane Doe</h2>
-            <p className="text-gray-600">jane.doe@example.com</p>
-            <p className="text-gray-600">username</p>
-            <p className="text-gray-600">NIC</p>
-            <p className="text-gray-600">COntact Number</p>
+            <h2 className="text-2xl font-bold text-gray-800">{userData ? userData.name : "User Name"}</h2>
+            <p className="text-gray-600">{userData ? userData.email : "User Email"}</p>
           </div>
           <svg
             xmlns="http://www.w3.org/2000/svg"

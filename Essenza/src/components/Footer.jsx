@@ -57,6 +57,10 @@ function Footer() {
                 <FaInstagram />
                 <FaTwitter />
               </div>
+              <div>
+                <hr/>
+                <h3 className="py-5 text-sm text-center">Copyright 2025@Essenza - All rights Reserved</h3>
+              </div>
             </div>
     </>
   )

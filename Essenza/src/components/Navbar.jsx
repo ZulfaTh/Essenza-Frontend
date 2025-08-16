@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { Link,useNavigate } from "react-router-dom";
-
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AppContent } from "../context/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const navItems = [
   { label: "Home", path: "/" },
@@ -13,43 +15,76 @@ const navItems = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+
+  const { userData, backendUrl, setUserData, setIsLoggedin } =
+    useContext(AppContent);
+
+    
+
+    const logout = async()=>{
+      try {
+        axios.defaults.withCredentials = true
+        const {data} = await axios.post(backendUrl + '/api/auth/logout')
+        data.success && setIsLoggedin (false)
+        data.success && setUserData (false)
+        navigate('/');
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
 
   return (
     <nav className="bg-purple-200 shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-2 py-3 flex items-center justify-between">
-        <img src="/logo.png" alt="Logo" className="w-15 h-15" />
+        <img src="/logo.png" alt="Logo" className="w-15 h-15 cursor-pointer"  onClick={()=>{navigate('/')}}/>
 
         {/* Desktop Navigation */}
         <div className="hidden sm:flex space-x-8">
           {navItems.map((item) => (
-           <Link
-  to={item.path}
-  style={{ color: "#6B21A8" }} // Tailwind's purple-900
-  className="no-underline hover:text-purple-700 hover:text-xl font-medium px-1 transition-colors"
->
-  {item.label}
-</Link>
-
-
+            <Link
+              to={item.path}
+              className="text-purple-900 no-underline hover:text-purple-700 hover:text-xl font-medium px-1 transition-colors"
+            >
+              {item.label}
+            </Link>
           ))}
         </div>
 
-        {/* Login/Register */}
+        {/* login */}
         <div className="flex gap-2 items-center">
-         <button
-         onClick={()=>{navigate('/login')}}
-        className="text-purple-500 font-semibold px-4 py-2 rounded"
-      >
-        Login
-      </button>
-          <span className="border-r-2 h-6"></span>
+          {userData ? (
+            <div onClick={()=>{navigate('/profile')}} className="w-10 h-10 flex justify-center items-center rounded-full bg-white text-purple-600 font-extrabold relative group cursor-pointer ">{userData.name[0].toUpperCase()}
+            
+            <div className="absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-10">
+              <ul className="list-none m-0 p-2 bg-gray-100 text-sm">
+              <li onClick={()=>{navigate('/profile')}} className="text-purple-900 py-1 px-2 hover:bg-gray-200 cursor-pointer ">Profile</li>
+                <li onClick={logout} className="text-purple-900 py-1 px-2 hover:bg-gray-200 cursor-pointer ">Logout</li>
+                
+              </ul>
+            </div>
+            
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                navigate("/login");
+              }}
+              className="text-purple-500 font-semibold bg-white cursor-pointer px-4 py-2 rounded hover:scale-105 transition-all duration-300"
+            >
+              Login
+            </button>
+          )}
+
+          {/* <span className="border-r-2 h-6"></span>
           <button
-          onClick={()=>{navigate('/register')}}
-        className=" text-purple-500 font-semibold px-4 py-2 rounded"
-      >
-        Register
-      </button>
+            onClick={() => {
+              navigate("/register");
+            }}
+            className=" text-purple-500 font-semibold px-4 py-2 rounded"
+          >
+            Register
+          </button>*/}
         </div>
 
         {/* Mobile menu button */}
