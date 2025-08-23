@@ -43,6 +43,7 @@ export default function Navbar() {
         <div className="hidden sm:flex space-x-8">
           {navItems.map((item) => (
             <Link
+             key={item.label}
               to={item.path}
               className="text-purple-900 no-underline hover:text-purple-700 hover:text-xl font-medium px-1 transition-colors"
             >
@@ -54,7 +55,10 @@ export default function Navbar() {
         {/* login */}
         <div className="flex gap-2 items-center">
           {userData ? (
-            <div onClick={()=>{navigate('/profile')}} className="w-10 h-10 flex justify-center items-center rounded-full bg-white text-purple-600 font-extrabold relative group cursor-pointer ">{userData.name[0].toUpperCase()}
+            <div onClick={()=>{navigate('/profile')}} className="flex justify-center items-center rounded-full relative group cursor-pointer ">
+            <img className=" rounded-full overflow-hidden border-4 border-purple-400 w-10 h-10 " src={userData.image} alt=""/>
+
+            {/* {userData.name[0].toUpperCase()} */}
             
             <div className="absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-10">
               <ul className="list-none m-0 p-2 bg-gray-100 text-sm">
