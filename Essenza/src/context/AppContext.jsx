@@ -11,8 +11,13 @@ export const AppContextProvider =(props)=>{
     axios.defaults.withCredentials=true;
    
     const backendUrl=import.meta.env.VITE_BACKEND_URL
+   
     const [isLoggedin,setIsLoggedin]=useState(false);
     const [userData,setUserData]=useState(false);
+    const[staffs,setStaffs]=useState([]);
+    const[services,setServices]=useState([]);
+
+    const currencySymbol='Rs'
 
     const getAuthState=async()=>{
         try {
@@ -33,21 +38,64 @@ export const AppContextProvider =(props)=>{
             const {data} = await axios.get(backendUrl + '/api/user/data')
             data.success ?  setUserData(data.userData) : toast.error(data.message)
         } catch (error) {
+            console.log(error)
             toast.error(error.message)
         }
     }
 
+    const getStaffsData = async()=>{
+        try {
+            const {data} = await axios.get(backendUrl + '/api/staff/list')
+
+               data.success ?  setStaffs(data.staffs) : toast.error(data.message)
+
+            
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
+    const getServicesData = async()=>{
+        try {
+            const {data} = await axios.get(backendUrl + '/api/service/list')
+
+               data.success ?  setServices(data.services) : toast.error(data.message)
+
+            
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
     //whenever web page loaded this will check for user logged in or not
     useEffect(()=>{
         getAuthState();
+        
+    },[])
+
+    useEffect(()=>{
+        getStaffsData();
+    },[])
+
+     useEffect(()=>{
+        getServicesData();
+    },[])
+    
+      useEffect(()=>{
+        getUserData();
     },[])
     
 
     const value = {
-         backendUrl,
+         backendUrl, 
+         staffs,getStaffsData,
+         services,getServicesData,
          isLoggedin, setIsLoggedin,
          userData, setUserData,
-         getUserData
+         getUserData,
+         currencySymbol,
+        
 
     }
 

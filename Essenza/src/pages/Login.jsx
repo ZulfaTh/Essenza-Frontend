@@ -7,16 +7,17 @@ import { toast } from "react-toastify";
 export default function Login() {
   const navigate = useNavigate();
 
-  const { backendUrl, setIsLoggedin, getUserData } = useContext(AppContent);
+  const { backendUrl,setIsLoggedin, getUserData } = useContext(AppContent);
 
-  const [state, setState] = useState("SIGN UP");
+  const [state, setState] = useState("LOGIN");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const onSubmitHandler = async (e) => {
+    e.preventDefault(); 
     try {
-      e.preventDefault();
+     
 
       //this will send cookies
       axios.defaults.withCredentials = true;

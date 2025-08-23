@@ -10,17 +10,17 @@ import Login from './pages/Login';
 
 import UserProfile from './pages/UserProfile';
 
-import AdminDashboard from './pages/AdminDashboard';
+
 import BookingForm from './pages/BookingForm';
 import PaymentPage from './pages/PaymentPage';
-import ServiceMgt from './pages/ServiceMgt';
-import StaffsMgt from './pages/StaffMgt';
+
 import ConfirmPage from './pages/ConfirmPage';
-import UserMgt from './pages/UserMgt';
-import StaffAvailability from './pages/StaffAvailabilty';
+
+
 import { ToastContainer } from 'react-toastify';
 import EmailVerify from './pages/EmailVerify';
 import ResetPassword from './pages/ResetPassword';
+import Appointment from './pages/Appointment';
 
 
 
@@ -43,16 +43,16 @@ function App() {
        <Route path='/reset-password' element={<ResetPassword/>}/>
         
        <Route path='/profile' element={<UserProfile/>}/>
-       <Route path='/admin' element={<AdminDashboard/>}/>
+
+       <Route path='/staff/:staffId' element={<Appointment/>}/>
+      
        <Route path='/booking' element={<BookingForm/>}/>
         <Route path='/payment' element={<PaymentPage/>}/>
         <Route path='/confirm' element={<ConfirmPage/>}/>
 
 
-          <Route path='/servicesmgt' element={<ServiceMgt/>}/>
-           <Route path='/staffsmgt' element={<StaffsMgt/>}/>
-            <Route path='/usermgt' element={<UserMgt/>}/>
-             <Route path='/staff_avilablity' element={<StaffAvailability/>}/>
+          
+            
     </Routes>
 <Footer/>
     </div>
