@@ -163,13 +163,14 @@ const Appointment = () => {
               <p className="text-gray-500">No available slots</p>
             )}
           </div>
-
+{  staffInfo.available &&
           <button
             onClick={handleBook}
             className="bg-purple-400 text-white px-14 py-3 rounded my-6 hover:bg-purple-700 cursor-pointer"
           >
             Book Appointment
           </button>
+}
         </div>
       </div>
     )

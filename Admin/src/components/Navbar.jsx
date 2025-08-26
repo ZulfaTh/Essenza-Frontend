@@ -2,10 +2,12 @@ import React, { useContext } from 'react'
 import logo from '../assets/logo.png'
 import { AdminContext } from '../context/AdminContext'
 import {useNavigate }from 'react-router-dom'
+import { StaffContext } from '../context/StaffContext'
 
 const Navbar = () => {
 
     const {aToken,setAToken} = useContext(AdminContext)
+    const {sToken,setSToken}=useContext(StaffContext)
 
     const navigate=useNavigate()
 
@@ -13,6 +15,8 @@ const Navbar = () => {
         navigate('/')
         aToken && setAToken ('')
         aToken && localStorage.removeItem('aToken')
+        sToken && setSToken ('')
+        sToken && localStorage.removeItem('sToken')
     }
   return (
     <div className='flex justify-between items-center px-4 sm:px-10 py-3 border-b bg-purple-200'>
