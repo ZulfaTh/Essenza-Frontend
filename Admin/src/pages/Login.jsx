@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { AdminContext } from "../context/AdminContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { StaffContext } from "../context/StaffContext";
 
 const Login = () => {
   const [state, setState] = useState("Admin");
@@ -9,6 +10,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const { setAToken, backendUrl } = useContext(AdminContext);
+  const {setSToken} =useContext(StaffContext)
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
@@ -27,6 +29,16 @@ const Login = () => {
         }
       } else {
        
+           const {data} = await axios.post(backendUrl + '/api/staff/login',{email,password})
+
+           if (data.success) {
+          localStorage.setItem("sToken", data.token);
+          setSToken(data.token);
+          console.log(data.token);
+          
+        } else {
+          toast.error(data.message);
+        }
       }
     } catch (error) {
       

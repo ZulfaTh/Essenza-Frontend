@@ -19,6 +19,7 @@ const StaffsList = () => {
 
             <div className="p-4 text-center">
               <p className="text-neutral-800 text-lg font-medium">{item.name}</p>
+               <p className="text-neutral-800 text-sm">{item.email}</p>
                <p className="text-neutral-800 text-sm">{item.speciality}</p>
                <div className="mt-2 flex justify-center items-center gap-1 text-sm ">
                 <input onChange={()=>changeStaffAvailability(item._id)} type="checkbox" checked={item.available}/>
