@@ -5,13 +5,13 @@ import { toast } from "react-toastify";
 
 const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
-const Appointment = () => {
+const StaffAvailability = () => {
   const { staffId } = useParams();
   const { staffs, userData, isLoggedin } = useContext(AppContent);
   const navigate = useNavigate();
 
   const [staffInfo, setStaffInfo] = useState(null);
-  const [staffSlots, setStaffSlots] = useState([]); // array of 7 arrays
+  const [staffSlots, setStaffSlots] = useState([]);
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTime] = useState("");
 
@@ -35,7 +35,7 @@ const Appointment = () => {
       day.setDate(today.getDate() + i);
 
       const slots = [];
-      for (let hour = 10; hour < 21; hour += 2) {
+      for (let hour = 9; hour < 21; hour += 2) {
         const slotDate = new Date(day);
         slotDate.setHours(hour, 0, 0, 0);
 
@@ -44,11 +44,7 @@ const Appointment = () => {
 
         // build keys
         const dateKey =
-          day.getDate() +
-          "_" +
-          (day.getMonth() + 1) +
-          "_" +
-          day.getFullYear();
+          day.getDate() + "_" + (day.getMonth() + 1) + "_" + day.getFullYear();
 
         const ampm = hour >= 12 ? "PM" : "AM";
         const hour12 = hour > 12 ? hour - 12 : hour;
@@ -122,7 +118,6 @@ const Appointment = () => {
         <div className="lg:ml-96 sm:ml-72 sm:pl-4 mt-4 font-medium text-gray-700">
           <p>Booking Slots</p>
 
-          {/* Date pills */}
           <div className="flex gap-3 overflow-x-scroll mt-4">
             {staffSlots.map((daySlots, index) => {
               const labelDate = daySlots[0]?.dateObj || new Date();
@@ -163,18 +158,18 @@ const Appointment = () => {
               <p className="text-gray-500">No available slots</p>
             )}
           </div>
-{  staffInfo.available &&
-          <button
-            onClick={handleBook}
-            className="bg-purple-400 text-white px-14 py-3 rounded my-6 hover:bg-purple-700 cursor-pointer"
-          >
-            Book Appointment
-          </button>
-}
+          {staffInfo.available && (
+            <button
+              onClick={handleBook}
+              className="bg-purple-400 text-white px-14 py-3 rounded my-6 hover:bg-purple-700 cursor-pointer"
+            >
+              Book Appointment
+            </button>
+          )}
         </div>
       </div>
     )
   );
 };
 
-export default Appointment;
+export default StaffAvailability;

@@ -9,12 +9,32 @@ const AdminContextProvider = (props) => {
     localStorage.getItem("aToken") ? localStorage.getItem("aToken") : ""
   );
 
+  const [users,setUsers] = useState([])
   const [staffs, setStaffs] = useState([]);
   const [services, setServices] = useState([]);
   const [appointments,setAppointments]=useState([])
   const [dashData,setDashData]=useState(false)
+  const [reviews, setReviews] = useState([]);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+   const getAllUsers = async () => {
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/admin/all-users",
+        {},
+        { headers: { aToken } }
+      );
+      if (data.success) {
+        setUsers(data.users);
+        console.log(data.users);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const getAllStaffs = async () => {
     try {
@@ -52,6 +72,7 @@ const AdminContextProvider = (props) => {
     }
   };
 
+  
   const changeStaffAvailability = async (staffId) => {
     try {
       const { data } = await axios.post(
@@ -107,6 +128,24 @@ const AdminContextProvider = (props) => {
     }
   }
 
+  const completeAppointment = async (appointmentId,staffId) => {
+    try {
+      const { data } = await axios.post(backendUrl + "/api/admin/complete-appointment",{appointmentId,staffId}, {
+        headers: { aToken },
+      });
+
+      if (data.success) {
+       toast.success(data.message)
+       getAllAppointments()
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
     const cancelAppointment = async (appointmentId) =>{
     try {
       const {data} = await axios.post (backendUrl + '/api/admin/cancel-appointment',{appointmentId},{headers:{aToken}})
@@ -140,10 +179,111 @@ const AdminContextProvider = (props) => {
     }
   }
 
+  const getAllReviews = async () => {
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/admin/all-reviews",{},
+        { headers: { aToken } }
+      );
+      if (data.success) {
+        setReviews(data.reviews);
+        console.log(data.reviews);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  // Update staff
+const editStaff = async (staffId, formData) => {
+  try {
+    const { data } = await axios.post(
+      backendUrl + "/api/admin/update-staff",
+      formData, // formData for image upload + fields
+      { headers: { aToken } }
+    );
+
+    if (data.success) {
+      toast.success(data.message);
+      getAllStaffs(); // refresh list
+    } else {
+      toast.error(data.message);
+    }
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+// Delete staff
+const deleteStaff = async (staffId) => {
+  try {
+    const { data } = await axios.post(
+      backendUrl + "/api/admin/delete-staff",
+      { staffId },
+      { headers: { aToken } }
+    );
+
+    if (data.success) {
+      toast.success(data.message);
+      getAllStaffs(); // refresh list
+    } else {
+      toast.error(data.message);
+    }
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+// Update service
+const editService = async (serviceId, formData) => {
+  try {
+    const { data } = await axios.post(
+      backendUrl + "/api/admin/update-service",
+      formData,
+      { headers: { aToken } }
+    );
+
+    if (data.success) {
+      toast.success(data.message);
+      getAllServices(); // refresh list
+    } else {
+      toast.error(data.message);
+    }
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+// Delete service
+const deleteService = async (serviceId) => {
+  try {
+    const { data } = await axios.post(
+      backendUrl + "/api/admin/delete-service",
+      { serviceId },
+      { headers: { aToken } }
+    );
+
+    if (data.success) {
+      toast.success(data.message);
+      getAllServices(); // refresh list
+    } else {
+      toast.error(data.message);
+    }
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+
+
   const value = {
     aToken,
     setAToken,
     backendUrl,
+    users,setUsers,
+    getAllUsers,
     staffs,
     getAllStaffs,
     changeStaffAvailability,
@@ -152,9 +292,14 @@ const AdminContextProvider = (props) => {
     changeServiceAvailability,
     appointments,setAppointments,
     getAllAppointments,
+    completeAppointment,
     cancelAppointment,
     dashData,setDashData,
-    getDashData
+    getDashData,
+    reviews,setReviews,
+    getAllReviews,
+    editStaff,deleteStaff,
+    editService,deleteService
   };
 
   return (

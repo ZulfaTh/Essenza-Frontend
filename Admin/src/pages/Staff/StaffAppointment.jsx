@@ -14,10 +14,20 @@ const StaffAppointment = () => {
   const { slotDateFormat, currency } = useContext(AppContext);
 
   useEffect(() => {
-    if (sToken) {
-      getAppointments();
-    }
-  }, [sToken]);
+  if (!sToken) return;
+
+  // Initial fetch
+  getAppointments();
+
+  // Poll every 5 seconds
+  const interval = setInterval(() => {
+    getAppointments();
+  }, 1000);
+
+  // Cleanup on unmount
+  return () => clearInterval(interval);
+}, [sToken]);
+
 
   return (
     <div className="w-full  m-5">
@@ -61,13 +71,11 @@ const StaffAppointment = () => {
             <p>
               {currency} {item.amount}
             </p>
-            <p className="w-12 py-1 text-xs inline border border-purple-500  rounded">
-              {item.payment ? "pending" : "pending"}
+            <p className="w-12 py-1 text-xs inline border text-center  border-purple-500 text-purple-500  rounded">
+              {item.payment ? "Done" : "pending"}
             </p>
 
-            {item.cancelled ? (
-              <p className="text-red-400 text-xs font-medium">Cancelled</p>
-            ) : item.isCompleted ? (
+            { item.isCompleted ? (
               <p className="text-green-500 text-xs font-medium">Completed</p>
             ) : (
               <div className="flex gap-5">
@@ -86,7 +94,7 @@ const StaffAppointment = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-                <svg
+                {/* <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
@@ -98,7 +106,7 @@ const StaffAppointment = () => {
                     d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
                     clip-rule="evenodd"
                   />
-                </svg>
+                </svg> */}
               </div>
             )}
           </div>

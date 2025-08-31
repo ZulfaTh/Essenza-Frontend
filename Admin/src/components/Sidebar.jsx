@@ -2,31 +2,27 @@ import React, { useContext } from "react";
 import { AdminContext } from "../context/AdminContext";
 import { NavLink } from "react-router-dom";
 import { StaffContext } from "../context/StaffContext";
+import { RiDashboardFill } from "react-icons/ri";
+import { FaUsersViewfinder } from "react-icons/fa6";
+import { MdRateReview } from "react-icons/md";
+
 
 export default function Sidebar() {
   const { aToken } = useContext(AdminContext);
   const { sToken } = useContext(StaffContext);
   return (
-    <div className="min-h-screen bg-purple-400  shadow-2xl px-5">
+    <div className="min-h-screen bg-purple-300  shadow-xl px-5">
       {aToken && (
         <ul className="text-white mt-5">
           <NavLink
             className={({ isActive }) =>
-              `flex items-center gap-3 py-3.5 px-3 md:px-2 cursor-pointer ${
+              `flex items-center gap-3 py-3.5 px-3 cursor-pointer ${
                 isActive ? "bg-purple-500 border-r-4 border-black" : ""
               } `
             }
             to={"/admin-dashboard"}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="size-6"
-            >
-              <path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z" />
-              <path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
-            </svg>
+            <RiDashboardFill className="size-6" />
 
             <p className="hidden md:block hover:scale-105">Dashboard</p>
           </NavLink>
@@ -58,6 +54,19 @@ export default function Sidebar() {
             </svg>
 
             <p className="hidden md:block hover:scale-105">Appointments</p>
+          </NavLink>
+
+           <NavLink
+            className={({ isActive }) =>
+              `flex items-center gap-3 py-3.5 px-3 cursor-pointer ${
+                isActive ? "bg-purple-500 border-r-4 border-black" : ""
+              } `
+            }
+            to={"/users-list"}
+          >
+           <FaUsersViewfinder  className="size-6"/>
+
+            <p className="hidden md:block hover:scale-105">Customers</p>
           </NavLink>
 
           <NavLink
@@ -150,6 +159,19 @@ export default function Sidebar() {
             </svg>
 
             <p className="hidden md:block hover:scale-105">Services List</p>
+          </NavLink>
+
+           <NavLink
+            className={({ isActive }) =>
+              `flex items-center gap-3 py-3.5 px-3  cursor-pointer ${
+                isActive ? "bg-purple-500 border-r-4 border-black" : ""
+              } `
+            }
+            to={"/reviews-list"}
+          >
+            <MdRateReview  className="size-6"/>
+
+            <p className="hidden md:block hover:scale-105">Reviews List</p>
           </NavLink>
         </ul>
       )}

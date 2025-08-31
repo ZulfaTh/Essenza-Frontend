@@ -20,30 +20,35 @@ export default function Navbar() {
   const { userData, backendUrl, setUserData, setIsLoggedin } =
     useContext(AppContent);
 
-    
-
-    const logout = async()=>{
-      try {
-        axios.defaults.withCredentials = true
-        const {data} = await axios.post(backendUrl + '/api/auth/logout')
-        data.success && setIsLoggedin (false)
-        data.success && setUserData (false)
-        navigate('/');
-      } catch (error) {
-        toast.error(error.message);
-      }
+  const logout = async () => {
+    try {
+      axios.defaults.withCredentials = true;
+      const { data } = await axios.post(backendUrl + "/api/auth/logout");
+      data.success && setIsLoggedin(false);
+      data.success && setUserData(false);
+      navigate("/");
+    } catch (error) {
+      toast.error(error.message);
     }
+  };
 
   return (
     <nav className="bg-purple-200 shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-2 py-3 flex items-center justify-between">
-        <img src="/logo.png" alt="Logo" className="w-15 h-15 cursor-pointer"  onClick={()=>{navigate('/')}}/>
+        <img
+          src="/logo.png"
+          alt="Logo"
+          className="w-15 h-15 cursor-pointer"
+          onClick={() => {
+            navigate("/");
+          }}
+        />
 
         {/* Desktop Navigation */}
         <div className="hidden sm:flex space-x-8">
           {navItems.map((item) => (
             <Link
-             key={item.label}
+              key={item.label}
               to={item.path}
               className="text-purple-900 no-underline hover:text-purple-700 hover:text-xl font-medium px-1 transition-colors"
             >
@@ -55,19 +60,38 @@ export default function Navbar() {
         {/* login */}
         <div className="flex gap-2 items-center">
           {userData ? (
-            <div onClick={()=>{navigate('/profile')}} className="flex justify-center items-center rounded-full relative group cursor-pointer ">
-            <img className=" rounded-full overflow-hidden border-4 border-purple-400 w-10 h-10 " src={userData.image} alt=""/>
+            <div
+              onClick={() => {
+                navigate("/profile");
+              }}
+              className="flex justify-center items-center rounded-full relative group cursor-pointer "
+            >
+              <img
+                className=" rounded-full overflow-hidden border-4 border-purple-400 w-10 h-10 object-cover"
+                src={userData.image}
+                alt=""
+              />
 
-            {/* {userData.name[0].toUpperCase()} */}
-            
-            <div className="absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-10">
-              <ul className="list-none m-0 p-2 bg-gray-100 text-sm">
-              <li onClick={()=>{navigate('/profile')}} className="text-purple-900 py-1 px-2 hover:bg-gray-200 cursor-pointer ">Profile</li>
-                <li onClick={logout} className="text-purple-900 py-1 px-2 hover:bg-gray-200 cursor-pointer ">Logout</li>
-                
-              </ul>
-            </div>
-            
+              {/* {userData.name[0].toUpperCase()} */}
+
+              <div className="absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-10">
+                <ul className="list-none m-0 p-2 bg-gray-100 text-sm">
+                  <li
+                    onClick={() => {
+                      navigate("/profile");
+                    }}
+                    className="text-purple-900 py-1 px-2 hover:bg-gray-200 cursor-pointer "
+                  >
+                    Profile
+                  </li>
+                  <li
+                    onClick={logout}
+                    className="text-purple-900 py-1 px-2 hover:bg-gray-200 cursor-pointer "
+                  >
+                    Logout
+                  </li>
+                </ul>
+              </div>
             </div>
           ) : (
             <button

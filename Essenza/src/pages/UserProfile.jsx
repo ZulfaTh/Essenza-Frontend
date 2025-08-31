@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContent } from "../context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import ReviewModal from "../components/ReviewModal";
 
 export default function UserProfile() {
   const {
@@ -11,10 +12,12 @@ export default function UserProfile() {
     token,
     getUserData,
     setUserData,
-    getStaffsData,
+    appointments,
+    getUserAppointments,
   } = useContext(AppContent);
 
-  const [appointments, setAppointments] = useState([]);
+  const [selectedAppt, setSelectedAppt] = useState(null);
+
   const months = [
     "",
     "Jan",
@@ -43,48 +46,6 @@ export default function UserProfile() {
 
   const navigate = useNavigate();
 
-  const getUserAppointments = async () => {
-    try {
-      const { data } = await axios.get(backendUrl + "/api/user/appointments", {
-        headers: { token },
-      });
-
-      if (data.success) {
-        setAppointments(data.appointments.reverse());
-        console.log(data.appointments);
-        console.log(
-          "Appointments:",
-          data.appointments,
-          Array.isArray(data.appointments)
-        );
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
-    }
-  };
-
-  const cancelAppointment = async (appointmentId) => {
-    try {
-      const { data } = await axios.post(
-        backendUrl + "/api/user/cancel-appointment",
-        { appointmentId },
-        { headers: { token } }
-      );
-
-      if (data.success) {
-        toast.success(data.message);
-        getUserAppointments();
-        getStaffsData();
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
-    }
-  };
-
   const updateUser = async () => {
     try {
       const formData = new FormData();
@@ -92,7 +53,7 @@ export default function UserProfile() {
       if (image) formData.append("image", image);
 
       const { data } = await axios.post(
-        `${backendUrl}/api/user/update-user`,
+        backendUrl + "/api/user/update-user",
         formData,
         {
           headers: { token },
@@ -101,7 +62,7 @@ export default function UserProfile() {
 
       if (data.success) {
         toast.success(data.message);
-        await getUserData(); // <-- call the function
+        await getUserData();
         setIsEdit(false);
         setImage(null);
       } else {
@@ -114,10 +75,19 @@ export default function UserProfile() {
   };
 
   useEffect(() => {
-    if (userData) {
-      getUserAppointments();
-    }
-  }, [userData]);
+  if (!userData) return;
+
+  // Initial fetch
+  getUserAppointments();
+
+  // Poll every 5 seconds
+  const interval = setInterval(() => {
+    getUserAppointments();
+  }, 5000);
+
+  return () => clearInterval(interval);
+}, [userData]);
+
 
   return (
     userData && (
@@ -168,7 +138,7 @@ export default function UserProfile() {
                 className="border p-2 rounded"
               />
             ) : (
-              <h2 className="text-2xl font-bold text-gray-800">
+              <h2 className="text-2xl text-center font-bold text-gray-800">
                 {userData.name}
               </h2>
             )}
@@ -239,36 +209,54 @@ export default function UserProfile() {
                 </div>
                 <div></div>
                 <div className="flex flex-col gap-2 justify-end">
-                {!item.cancelled && item.payment && !item.isCompleted && 
-                    <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-blue-600 hover:text-white transition-all duration-300">
-                      Paid
+                  {!item.cancelled && item.payment && !item.isCompleted && (
+                    <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded bg-yellow-400 hover:text-white transition-all duration-300">
+                      Pending
                     </button>
-                  }
-                  {!item.cancelled && !item.payment && !item.isCompleted && 
+                  )}
+                  {/* {!item.cancelled && !item.payment && !item.isCompleted && 
                     <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-blue-600 hover:text-white transition-all duration-300">
                       Payment
                     </button>
-                  }
-                  {!item.cancelled && !item.isCompleted && 
+                  } */}
+                  {/* {!item.cancelled && !item.isCompleted && 
                     <button
                       onClick={() => cancelAppointment(item._id)}
                       className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded  hover:bg-red-600 hover:text-white transition-all duration-300"
                     >
                       Cancel
                     </button>
-                  }
+                  } */}
 
-                  {item.cancelled && !item.isCompleted &&  
+                  {/* {item.cancelled && !item.isCompleted &&  
                     <button className="sm:min-w-48 py-2 border border-red-500 text-red-500">
                       Appointment Cancelled
                     </button>
-                  }
+                  } */}
 
-                    {item.isCompleted &&  
-                    <button className="sm:min-w-48 py-2 border border-green-500 text-green-500">
+                  {item.isCompleted && (
+                    <button className="sm:min-w-48 py-2 border border-gray-500 rounded bg-green-500">
                       Completed
                     </button>
-                  }
+                  )}
+
+                  <div className="flex flex-col gap-2 justify-end">
+                    {item.isCompleted && item.review === null && (
+                      <button
+                        onClick={() => setSelectedAppt(item)}
+                        className="sm:min-w-48 py-2 border border-blue-500 rounded text-blue-500 hover:bg-blue-500 hover:text-white transition-all duration-300 cursor-pointer"
+                      >
+                        Leave a Review
+                      </button>
+                    )}
+
+                    {item.isCompleted && item.review !== null && (
+                      <div className="p-2 border rounded bg-green-100 text-green-700">
+                        <p>Rating: {item.review.rating}</p>
+                        <p>Comment: {item.review.comment}</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -291,6 +279,18 @@ export default function UserProfile() {
             </svg>
           </div>
         </div>
+        {/* review modal */}
+        {selectedAppt && (
+          <ReviewModal
+            appointmentId={selectedAppt._id}
+            staffId={selectedAppt.staffId}
+            userId={userData._id}
+            onClose={() => setSelectedAppt(null)}
+            backendUrl={backendUrl}
+            token={token}
+            refreshAppointments={getUserAppointments}
+          />
+        )}
       </div>
     )
   );
