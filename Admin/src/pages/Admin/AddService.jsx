@@ -11,49 +11,50 @@ const AddService = () => {
   const [duration, setDuration] = useState("1 Hour");
   const [about, setAbout] = useState("");
 
+  const { backendUrl, aToken } = useContext(AdminContext);
 
-  const {backendUrl,aToken} =useContext(AdminContext)
-
-  const onSubmitHandler = async (event) =>{
-    event.preventDefault()
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
 
     try {
-      
-      if(!serviceImg){
-        return toast.error('Image not selected')
+      if (!serviceImg) {
+        return toast.error("Image not selected");
       }
 
-      const formData = new FormData()
+      const formData = new FormData();
 
-      formData.append('image',serviceImg)
-      formData.append('name',name)
-      formData.append('price',price)
-      formData.append('duration',duration)
-      formData.append('about',about)
-      
+      formData.append("image", serviceImg);
+      formData.append("name", name);
+      formData.append("price", price);
+      formData.append("duration", duration);
+      formData.append("about", about);
 
       //console log form data
-      formData.forEach((value,key)=>{
+      formData.forEach((value, key) => {
         console.log(`${key} : ${value}`);
-      })
+      });
 
-      const {data} = await axios.post(backendUrl + '/api/admin/add-service',formData,{headers:{aToken}})
+      const { data } = await axios.post(
+        backendUrl + "/api/admin/add-service",
+        formData,
+        { headers: { aToken } }
+      );
 
-      if(data.success){
-        toast.success(data.message)
-        setServiceImg(false)
-        setName('')
-        setPrice('')
-        setDuration('')
-        setAbout('')
-      }else{
-        toast.error(data.message)
+      if (data.success) {
+        toast.success(data.message);
+        setServiceImg(false);
+        setName("");
+        setPrice("");
+        setDuration("");
+        setAbout("");
+      } else {
+        toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message)
-      console.log(error)
+      toast.error(error.message);
+      console.log(error);
     }
-  }
+  };
   return (
     <form onSubmit={onSubmitHandler} className="m-5 w-full">
       {/* title */}
@@ -105,8 +106,6 @@ const AddService = () => {
               />
             </div>
 
-        
-
             <div className="flex-1 flex flex-col gap-1">
               <p>Duration </p>
               <select
@@ -116,13 +115,14 @@ const AddService = () => {
                 name=""
                 id=""
               >
+                <option value="0.5 Hour">0.5 Hour</option>
                 <option value="1 Hour">1 Hour</option>
-                 <option value="1.5 Hour">1.5 Hour</option>
-                <option value="2 Hour">2 Hour</option>
-                 <option value="2.5 Hour">2.5 Hour</option>
-                <option value="3 Hour">3 Hour</option>
-                 <option value="3.5 Hour">3 Hour</option>
-                <option value="4 Hour">4 Hour</option>
+                <option value="1.5 Hour">1.5 Hour</option>
+                <option value="2 Hours">2 Hours</option>
+                <option value="2.5 Hours">2.5 Hours</option>
+                <option value="3 Hours">3 Hours</option>
+                <option value="3.5 Hours">3 Hours</option>
+                <option value="4 Hours">4 Hours</option>
               </select>
             </div>
 
@@ -138,9 +138,10 @@ const AddService = () => {
               />
             </div>
 
-           
-
-            <button type="submit" className="bg-purple-500 text-white px-10 py-3 mt-4 cursor-pointer">
+            <button
+              type="submit"
+              className="bg-purple-500 text-white px-10 py-3 mt-4 cursor-pointer"
+            >
               Add Service
             </button>
           </div>

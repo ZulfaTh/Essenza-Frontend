@@ -58,10 +58,10 @@ const AddStaff = () => {
   }
   return (
     <form onSubmit={onSubmitHandler} className="m-5 w-full">
-      {/* title */}
+    
       <p className="mb-3 text-lg font-medium ">Add Staff</p>
       <div className="bg-white px-8 py-8 border rounded w-full max-w-4xl max-h-[80vh] overflow-y-scroll">
-        {/* image */}
+       
         <div className="flex items-center gap-4 mb-8 text-gray-500">
           <label htmlFor="staff-img">
             <img
@@ -129,10 +129,10 @@ const AddStaff = () => {
                 id=""
               >
                 <option value="1 Year">1 Year</option>
-                <option value="2 Year">2 Year</option>
-                <option value="3 Year">3 Year</option>
-                <option value="4 Year">4 Year</option>
-                <option value="5 Year">5 Year</option>
+                <option value="2 Years">2 Years</option>
+                <option value="3 Years">3 Years</option>
+                <option value="4 Years">4 Years</option>
+                <option value="5 Years">5 Years</option>
               </select>
             </div>
 
@@ -157,10 +157,11 @@ const AddStaff = () => {
                 name=""
                 id=""
               >
-                <option value="Hair Cut">Hair Cut</option>
-                <option value="Manicure">'Manicure</option>
-                <option value="Pedicure">Pedicure</option>
-                <option value="Makeup">Makeup</option>
+                <option value="Hair Specialists">Hair Specialist</option>
+                <option value="Skin & Beauty Specialists">Skin & Beauty Specialist</option>
+                <option value="Nail & Hand/Feet Specialists">Nail & Hand/Feet Specialist</option>
+                <option value="Makeup Specialists">Makeup Specialist</option>
+                 <option value="Spa & Wellness Specialists">Spa & Wellness Specialist</option>
               </select>
             </div>
 

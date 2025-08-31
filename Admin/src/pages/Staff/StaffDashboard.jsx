@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from "react";
 import { StaffContext } from "../../context/StaffContext";
-import customerImg from "../../assets/customers.jpeg";
+import userImg from "../../assets/userImg.png";
 import rupeesImg from "../../assets/rupees.jpg";
 import appointmentsImg from "../../assets/appointments.png";
-import listImg from "../../assets/listImg.jpeg";
+import listImg from "../../assets/listImg.png";
 import { AppContext } from "../../context/AppContext";
 
 const StaffDashboard = () => {
@@ -13,10 +13,20 @@ const StaffDashboard = () => {
   const { currency,slotDateFormat } = useContext(AppContext);
 
   useEffect(() => {
-    if (sToken) {
-      getDashData();
-    }
-  }, [sToken]);
+  if (!sToken) return;
+
+  // Initial fetch
+  getDashData()
+
+  // Poll every 5 seconds
+  const interval = setInterval(() => {
+    getDashData();
+  }, 1000);
+
+  // Cleanup on unmount
+  return () => clearInterval(interval);
+}, [sToken]);
+
 
   return (
     dashData && (
@@ -35,7 +45,7 @@ const StaffDashboard = () => {
 
           {/* users */}
           <div className="flex items-center gap-2  px-10 py-5  bg-white shadow-xl rounded cursor-pointer hover:scale-105 transition-all">
-            <img src={customerImg} alt="Staffs" className="w-16 " />
+            <img src={userImg} alt="Staffs" className="w-16 " />
             <div>
               <p className="text-2xl font-bold">{dashData.users}</p>
               <p className="text-gray-500">Customers</p>
@@ -69,7 +79,7 @@ const StaffDashboard = () => {
                 key={index}
               >
                 <img
-                  className="rounded-full w-10"
+                  className="w-8 h-8 rounded-full object-cover "
                   src={item.userData.image}
                   alt=""
                 />
@@ -81,9 +91,7 @@ const StaffDashboard = () => {
                     {slotDateFormat(item.slotDate)}
                   </p>
                 </div>
-                {item.cancelled ? (
-              <p className="text-red-400 text-xs font-medium">Cancelled</p>
-            ) : item.isCompleted ? (
+                {item.isCompleted ? (
               <p className="text-green-500 text-xs font-medium">Completed</p>
             ) : (
               <div className="flex gap-5">
@@ -102,7 +110,7 @@ const StaffDashboard = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-                <svg
+                {/* <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
@@ -114,7 +122,7 @@ const StaffDashboard = () => {
                     d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
                     clip-rule="evenodd"
                   />
-                </svg>
+                </svg> */}
               </div>
             )}
               </div>
